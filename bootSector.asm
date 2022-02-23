@@ -16,23 +16,24 @@
     call print_string
     mov bx, String2
     call print_string
-    jmp done
+
+    mov bx, String3
+    call print_string
+
+    mov dx, 0x12AB
+    call print_hex
 
 
-print_string:
-    mov al, [bx]
-    cmp al, 0
-    je end_print          ; jump if al == 0
-    int 0x10
-    add bx, 1
-    jmp print_string
-end_print:
-    ret
-
-String: db 'F', 'B', '0', '0', 'T', 0xa, 0xd, 0
-String2: db 'd', 'e', 'v', '-', 'f', 'r', 'o', 'g', 0xa, 0xd, 0
-
-done:
     jmp $
+
+    include 'print_string.asm'
+    include 'print_hex.asm'
+
+
+String: db 'FBoot', 0xa, 0xd, 0
+String2: db 'dev-frog', 0xa, 0xd, 0
+
+String3: db 'Hex: ', 0
+
     times 510-($-$$) db 0 ;pads out 0s until we reach the 510th byte
     dw 0xaa55 ;signature bois magic number
